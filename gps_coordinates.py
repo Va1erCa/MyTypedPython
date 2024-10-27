@@ -8,48 +8,41 @@ from exception import IncorrectCoordinateInput
 # применяем slots и frozen для преобразования к компактному хранению и если нужен read only object
 # без slots и frozen - not read only object
 @dataclass(slots=True, frozen=True)
-
 class Coordinates:
     latitude: float
     longitude: float
 
 def get_gps_coordinates() -> Coordinates:
-    # Инициализируем координатами по умолчанию:
-    latitude,  longitude = (config.LATITUDE,  config.LONGITUDE)
-
     # Получаем широту
-    print('Введите широту в формате [[+/-]##[.######]] в диапазоне от -90 до +90:')
-    string_input = input().strip()
-    if len(string_input) == 0:
-        print(f'Выбрано значение широты по-умолчанию: {config.LATITUDE}')
-    else:
-        try:
-            latitude = float(string_input)
-        except ValueError:
-            print('Ошибка: введено не число.')
-            raise IncorrectCoordinateInput
-        if latitude < -90 or latitude > 90:
-            raise IncorrectCoordinateInput
-
+    print('Введите широту,')
+    latitude = _get_coord(90, config.LATITUDE)
     # Получаем долготу
-    print('Введите долготу в формате [##[.######]] в диапазоне от -180 до +180:')
+    print('Введите долготу, ')
+    longitude = _get_coord(180, config.LONGITUDE)
+    return _round_coordinates(Coordinates(latitude=latitude, longitude=longitude))
+
+def _get_coord(border: int, default: float) -> float:
+    coordinate = default
+    print(f'введите значение в формате [[+/-]##[.######]] в диапазоне от -{border} до +{border}:')
     string_input = input().strip()
     if len(string_input) == 0:
-        print(f'Выбрано значение долготы по-умолчанию: {config.LONGITUDE}')
+        print(f'Выбрано значение по-умолчанию: {default}')
     else:
         try:
-            longitude = float(string_input)
+            coordinate = float(string_input)
         except ValueError:
             print('Ошибка: введено не число.')
             raise IncorrectCoordinateInput
-        if longitude < -180 or longitude > 180:
+        if coordinate < -border or coordinate > border:
             raise IncorrectCoordinateInput
+    return coordinate
 
+def _round_coordinates(coordinates: Coordinates) -> Coordinates:
     # округляем если задано в настройках
     if config.USE_ROUNDED_COORDS:
-        latitude, longitude = map(lambda c: round(c, 1), [latitude, longitude])
-
-    return Coordinates(latitude=latitude, longitude=longitude)
+        return Coordinates(*map(lambda c: round(c, 1), [coordinates.longitude, coordinates.longitude]))
+    else:
+        return coordinates
 
 if __name__ == "__main__":
     print(get_gps_coordinates())
