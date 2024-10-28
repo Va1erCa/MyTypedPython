@@ -2,7 +2,8 @@
 
 from datetime import datetime
 from dataclasses import dataclass
-from enum import Enum
+import enum
+
 import json
 from json.decoder import JSONDecodeError
 import ssl
@@ -17,7 +18,7 @@ from exceptions import ApiServiceError
 Celsius = float
 
 
-class WeatherType(str, Enum) :
+class WeatherType(enum.StrEnum) :
     THUNDERSTORM = "Гроза"
     DRIZZLE = "Изморось"
     RAIN = "Дождь"

@@ -6,6 +6,10 @@ from exceptions import IncorrectCoordinateInput
 from coordinates import Coordinates
 
 def get_gps_coordinates() -> Coordinates:
+    """
+
+    :rtype: object
+    """
     # Получаем широту
     print('Введите широту,')
     latitude = _get_coord(90, config.LATITUDE)
