@@ -53,6 +53,7 @@ def _get_openweather_response(latitude: float, longitude: float) -> Response :
     url = config.OPENWEATHER_URL.format(latitude=latitude, longitude=longitude)
 
     try :
+        # return urllib.request.urlopen(url).read()
         return requests.get(url)
     except Exception:
         raise ApiServiceError
@@ -60,6 +61,7 @@ def _get_openweather_response(latitude: float, longitude: float) -> Response :
 
 def _parse_openweather_response(openweather_response: Response) -> Weather :
     try :
+        # openweather_dict = json.loads(openweather_response)
         openweather_dict = openweather_response.json()
     except JSONDecodeError :
         raise ApiServiceError
@@ -68,6 +70,7 @@ def _parse_openweather_response(openweather_response: Response) -> Weather :
         weather_type=_parse_weather_type(openweather_dict),
         sunrise=_parse_sun_time(openweather_dict, "sunrise"),
         sunset=_parse_sun_time(openweather_dict, "sunset"),
+        # sunset="2024-10-29",                                  # пример ошибки которую найдет mypy
         city=_parse_city(openweather_dict)
     )
 

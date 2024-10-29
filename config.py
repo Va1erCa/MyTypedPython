@@ -8,8 +8,9 @@ __doc__='''
     env_example_list=1,2,3,4,5
     env_example_dict=A=Hello,B=Bye bye
 '''
-
+import typing
 import environ
+
 
 # Флаг точного/приблизительного применения координат (False/True)
 USE_ROUNDED_COORDS = False
@@ -23,9 +24,9 @@ LONGITUDE = 40.280044
 # LONGITUDE = 39.719080
 
 # чтение секретного api-ключа из файла перенменных среды окружения
-env = environ.Env()
+env: environ.Env = environ.Env()
 environ.Env.read_env()
-OPENWEATHER_API = env('openweather_api', str)
+OPENWEATHER_API: str = env('openweather_api', str)
 
 # Шаблоны для доступа к API сервиса OpenWeather
 OPENWEATHER_URL = (
