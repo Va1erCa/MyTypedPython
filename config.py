@@ -15,12 +15,12 @@ import environ
 USE_ROUNDED_COORDS = False
 
 # Координаты по-умолчанию (Заводской)
-# LATITUDE = 48.403121
-# LONGITUDE = 40.280044
+LATITUDE = 48.403121
+LONGITUDE = 40.280044
 
 # Координаты по-умолчанию (Ростов-на-Дону)
-LATITUDE = 47.229060
-LONGITUDE = 39.719080
+# LATITUDE = 47.229060
+# LONGITUDE = 39.719080
 
 # чтение секретного api-ключа из файла перенменных среды окружения
 env = environ.Env()

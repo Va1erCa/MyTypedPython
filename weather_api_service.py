@@ -3,13 +3,15 @@
 from datetime import datetime
 from dataclasses import dataclass
 import enum
-
-import json
+import requests, json
 from json.decoder import JSONDecodeError
-import ssl
+# import ssl
 from typing import Literal
-import urllib.request
-from urllib.error import URLError
+
+from requests import Response
+
+# import urllib.request
+# from urllib.error import URLError
 
 from coordinates import Coordinates
 import config
@@ -45,18 +47,20 @@ def get_weather(coordinates: Coordinates) -> Weather :
     return weather
 
 
-def _get_openweather_response(latitude: float, longitude: float) -> str :
-    ssl._create_default_https_context = ssl._create_unverified_context
+def _get_openweather_response(latitude: float, longitude: float) -> Response :
+    # ssl._create_default_https_context = ssl._create_unverified_context
+    # url = config.OPENWEATHER_URL.format(latitude=latitude, longitude=longitude)
     url = config.OPENWEATHER_URL.format(latitude=latitude, longitude=longitude)
+
     try :
-        return urllib.request.urlopen(url).read()
-    except URLError :
+        return requests.get(url)
+    except Exception:
         raise ApiServiceError
 
 
-def _parse_openweather_response(openweather_response: str) -> Weather :
+def _parse_openweather_response(openweather_response: Response) -> Weather :
     try :
-        openweather_dict = json.loads(openweather_response)
+        openweather_dict = openweather_response.json()
     except JSONDecodeError :
         raise ApiServiceError
     return Weather(
